@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 27 Nov 2018 pada 03.11
+-- Generation Time: 12 Des 2018 pada 10.08
 -- Versi Server: 10.1.30-MariaDB
 -- PHP Version: 7.0.27
 
@@ -42,7 +42,8 @@ CREATE TABLE `tbl_acara` (
 --
 
 INSERT INTO `tbl_acara` (`id_acara`, `nama_acara`, `tanggal_acara`, `deskripsi`, `image`, `id_sekolah`) VALUES
-(1, 'Acara Penerimaan Siswa Baru', '2018-11-07', 'BUTETTTSSSSSS', 'Mantul', 22);
+(1, 'Acara Penerimaan Siswa Baru', '2018-11-07', 'BUTETTTSSSSSS', 'Mantul', 22),
+(3, 'Acara Penerimaan Siswa Baru', '2018-12-14', 'ACARA BAPUKSSSSSS', 'b468fa4972899c8cbb9fd694270e2b0b.jpg', 0);
 
 -- --------------------------------------------------------
 
@@ -64,7 +65,12 @@ CREATE TABLE `tbl_berita` (
 --
 
 INSERT INTO `tbl_berita` (`id_berita`, `nama_berita`, `tanggal_berita`, `deskripsi`, `image`, `id_sekolah`) VALUES
-(5, 'ASA DE QINTIL', '2018-11-07', 'CAWWWWW', 'e4f5ee34fa0ef3396f1e3e8559a89126.jpg', 22);
+(5, 'ASA DE QINTIL', '2018-11-07', 'CAWWWWW', '9a4cd67744a9936318c5ccae6777540b.jpg', 0),
+(6, 'ASOY GEBOY', '2018-12-12', 'CMIWWW', '1e318db8b5e7042e4bd9194cc7e459a6.jpg', 0),
+(7, 'ASOY GEBOY', '2018-12-16', 'BUTETTT', '665fe422b74dd11a3f035934fb9ee172.jpg', 22),
+(8, 'ASOY GEBOY', '2018-12-19', 'PRIKITIWWW', '8231897ef70b4f0b4a153a51d8cc5031.png', 22),
+(9, 'Helsan Krenzzz', '2018-12-05', 'Butettt', '5980179abd0f2d4d41d882615e8834a9.png', 21),
+(10, 'Helsan Krenzzz 2', '2018-12-16', 'Krenzzz', '8837aefd0611662aa77517c77c1a33d7.jpg', 21);
 
 -- --------------------------------------------------------
 
@@ -103,6 +109,13 @@ CREATE TABLE `tbl_fasilitas` (
   `id_sekolah` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data untuk tabel `tbl_fasilitas`
+--
+
+INSERT INTO `tbl_fasilitas` (`id_fasilitas`, `nama_fasilitas`, `image`, `id_sekolah`) VALUES
+(2, 'Kantin', '9fecff0bd8d80e2e0edf1f236a6750e8.jpg', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -136,7 +149,11 @@ INSERT INTO `tbl_hak_akses` (`id`, `id_user_level`, `id_menu`) VALUES
 (37, 1, 12),
 (38, 3, 12),
 (39, 1, 13),
-(40, 3, 13);
+(40, 3, 13),
+(41, 1, 14),
+(42, 3, 14),
+(43, 1, 15),
+(44, 3, 15);
 
 -- --------------------------------------------------------
 
@@ -165,7 +182,9 @@ INSERT INTO `tbl_menu` (`id_menu`, `title`, `url`, `icon`, `is_main_menu`, `is_a
 (10, 'Profile Sekolah', 'Profile_sekolah', 'glyphicon glyphicon-user', 0, 'y'),
 (11, 'Acara', 'Acara', 'glyphicon glyphicon-user', 0, 'y'),
 (12, 'Berita', 'Berita', 'glyphicon glyphicon-user', 0, 'y'),
-(13, 'Ekskul', 'Ekskul', 'glyphicon glyphicon-user', 0, 'y');
+(13, 'Ekskul', 'Ekskul', 'glyphicon glyphicon-user', 0, 'y'),
+(14, 'Fasilitas', 'Fasilitas', 'glyphicon glyphicon-user', 0, 'y'),
+(15, 'Prestasi', 'Prestasi', 'glyphicon glyphicon-user', 0, 'y');
 
 -- --------------------------------------------------------
 
@@ -181,6 +200,15 @@ CREATE TABLE `tbl_prestasi` (
   `image` varchar(255) NOT NULL,
   `id_sekolah` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `tbl_prestasi`
+--
+
+INSERT INTO `tbl_prestasi` (`id_prestasi`, `nama_prestasi`, `tanggal_didapat`, `deskripsi`, `image`, `id_sekolah`) VALUES
+(2, 'Juara Taekwondo', '2018-12-12', 'MENANGGG', '191a05a64ae39e34372ea79602b4c84a.jpg', 0),
+(3, 'Juara Taekwondo', '2018-12-17', 'BAPUKKK', 'fe2d7ac604905fb98172298b5028673c.jpg', 22),
+(4, 'Juara Taekwondo', '2018-12-11', 'Bapuk Jasaaa', 'db4a55f40c4e807b904dc3e77472c549.jpg', 0);
 
 -- --------------------------------------------------------
 
@@ -355,13 +383,13 @@ ALTER TABLE `tbl_user_level`
 -- AUTO_INCREMENT for table `tbl_acara`
 --
 ALTER TABLE `tbl_acara`
-  MODIFY `id_acara` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_acara` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tbl_berita`
 --
 ALTER TABLE `tbl_berita`
-  MODIFY `id_berita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_berita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `tbl_ekskul`
@@ -373,25 +401,25 @@ ALTER TABLE `tbl_ekskul`
 -- AUTO_INCREMENT for table `tbl_fasilitas`
 --
 ALTER TABLE `tbl_fasilitas`
-  MODIFY `id_fasilitas` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_fasilitas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tbl_hak_akses`
 --
 ALTER TABLE `tbl_hak_akses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `tbl_menu`
 --
 ALTER TABLE `tbl_menu`
-  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `tbl_prestasi`
 --
 ALTER TABLE `tbl_prestasi`
-  MODIFY `id_prestasi` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_prestasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tbl_profile_sekolah`
@@ -416,28 +444,6 @@ ALTER TABLE `tbl_user`
 --
 ALTER TABLE `tbl_user_level`
   MODIFY `id_user_level` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
---
-
---
--- Ketidakleluasaan untuk tabel `tbl_acara`
---
-ALTER TABLE `tbl_acara`
-  ADD CONSTRAINT `tbl_acara_ibfk_1` FOREIGN KEY (`id_sekolah`) REFERENCES `tbl_profile_sekolah` (`id_sekolah`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `tbl_fasilitas`
---
-ALTER TABLE `tbl_fasilitas`
-  ADD CONSTRAINT `tbl_fasilitas_ibfk_1` FOREIGN KEY (`id_sekolah`) REFERENCES `tbl_profile_sekolah` (`id_sekolah`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `tbl_prestasi`
---
-ALTER TABLE `tbl_prestasi`
-  ADD CONSTRAINT `tbl_prestasi_ibfk_1` FOREIGN KEY (`id_sekolah`) REFERENCES `tbl_profile_sekolah` (`id_sekolah`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
