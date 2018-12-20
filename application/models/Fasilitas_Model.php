@@ -17,11 +17,10 @@ class Fasilitas_Model extends CI_Model
 
     // datatables
     function json() {
-        $session = $this->session->userdata('id_sekolah');
-
-        if($session != 0){
-            $this->datatables->select('id_fasilitas,nama_fasilitas,image,id_sekolah');
-            $this->datatables->where('id_sekolah',$session);
+        $id_sekolah = $this->session->userdata('id_sekolah');
+        if($id_sekolah != 0){
+            $this->datatables->select('id_fasilitas,nama_fasilitas,id_sekolah');
+            $this->datatables->where('id_sekolah',$id_sekolah);
             $this->datatables->from('tbl_fasilitas');
             //add this line for join
             //$this->datatables->join('table2', 'tbl_fasilitas.field = table2.field');
@@ -30,16 +29,16 @@ class Fasilitas_Model extends CI_Model
                     ".anchor(site_url('fasilitas/delete/$1'),'<i class="fa fa-trash-o" aria-hidden="true"></i>','class="btn btn-danger btn-sm" onclick="javasciprt: return confirm(\'Are You Sure ?\')"'), 'id_fasilitas');
             return $this->datatables->generate();
         }else{
-            $this->datatables->select('id_fasilitas,nama_fasilitas,image,id_sekolah');
-            $this->datatables->from('tbl_fasilitas');
-            //add this line for join
-            //$this->datatables->join('table2', 'tbl_fasilitas.field = table2.field');
-            $this->datatables->add_column('action', anchor(site_url('fasilitas/read/$1'),'<i class="fa fa-eye" aria-hidden="true"></i>', array('class' => 'btn btn-danger btn-sm'))." 
-                ".anchor(site_url('fasilitas/update/$1'),'<i class="fa fa-pencil-square-o" aria-hidden="true"></i>', array('class' => 'btn btn-danger btn-sm'))." 
-                    ".anchor(site_url('fasilitas/delete/$1'),'<i class="fa fa-trash-o" aria-hidden="true"></i>','class="btn btn-danger btn-sm" onclick="javasciprt: return confirm(\'Are You Sure ?\')"'), 'id_fasilitas');
-            return $this->datatables->generate();
+            $this->datatables->select('id_fasilitas,nama_fasilitas,id_sekolah');
+        $this->datatables->from('tbl_fasilitas');
+        //add this line for join
+        //$this->datatables->join('table2', 'tbl_fasilitas.field = table2.field');
+        $this->datatables->add_column('action', anchor(site_url('fasilitas/read/$1'),'<i class="fa fa-eye" aria-hidden="true"></i>', array('class' => 'btn btn-danger btn-sm'))." 
+            ".anchor(site_url('fasilitas/update/$1'),'<i class="fa fa-pencil-square-o" aria-hidden="true"></i>', array('class' => 'btn btn-danger btn-sm'))." 
+                ".anchor(site_url('fasilitas/delete/$1'),'<i class="fa fa-trash-o" aria-hidden="true"></i>','class="btn btn-danger btn-sm" onclick="javasciprt: return confirm(\'Are You Sure ?\')"'), 'id_fasilitas');
+        return $this->datatables->generate();
         }
-       
+        
     }
 
     // get all
@@ -60,7 +59,6 @@ class Fasilitas_Model extends CI_Model
     function total_rows($q = NULL) {
         $this->db->like('id_fasilitas', $q);
 	$this->db->or_like('nama_fasilitas', $q);
-	$this->db->or_like('image', $q);
 	$this->db->or_like('id_sekolah', $q);
 	$this->db->from($this->table);
         return $this->db->count_all_results();
@@ -71,7 +69,6 @@ class Fasilitas_Model extends CI_Model
         $this->db->order_by($this->id, $this->order);
         $this->db->like('id_fasilitas', $q);
 	$this->db->or_like('nama_fasilitas', $q);
-	$this->db->or_like('image', $q);
 	$this->db->or_like('id_sekolah', $q);
 	$this->db->limit($limit, $start);
         return $this->db->get($this->table)->result();
@@ -81,6 +78,8 @@ class Fasilitas_Model extends CI_Model
     function insert($data)
     {
         $this->db->insert($this->table, $data);
+        $insert_id = $this->db->insert_id();
+        return $insert_id;
     }
 
     // update data
@@ -97,10 +96,18 @@ class Fasilitas_Model extends CI_Model
         $this->db->delete($this->table);
     }
 
-    function get_gambar($id){
+    public function insert_gambar($data = array()){
+        $insert = $this->db->insert_batch('gambar_fasilitas',$data);
+        return $insert?true:false;
+    }
+    function get_gambar_by_id($id){
         $this->db->where('id_fasilitas',$id);
-        return $this->db->get('tbl_fasilitas')->result();
+        $query = $this->db->get('gambar_fasilitas')->result();
+        return $query;
+    }
+    function delete_gambar($id){
+        $this->db->where('id_fasilitas', $id);
+        $this->db->delete('gambar_fasilitas');
     }
 
 }
-

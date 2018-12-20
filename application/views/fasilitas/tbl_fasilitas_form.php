@@ -10,7 +10,17 @@
 <table class='table table-bordered>'        
 
 	    <tr><td width='200'>Nama Fasilitas <?php echo form_error('nama_fasilitas') ?></td><td><input type="text" class="form-control" name="nama_fasilitas" id="nama_fasilitas" placeholder="Nama Fasilitas" value="<?php echo $nama_fasilitas; ?>" /></td></tr>
-	    <tr><td width='200'>Image <?php echo form_error('image') ?></td><td><input type="file" class="form-control" name="image" id="image" placeholder="Image" value="<?php echo $image; ?>" /></td></tr>
+	    <tr>
+						<td width='200'>Upload Gambar 
+							
+						</td>
+						<td>
+							<input type="file" class="form-control" name="userFiles[]" multiple require/>
+                                
+							</td>
+						</tr>
+       
+        <!-- <tr><td width='200'>Id Sekolah <?php echo form_error('id_sekolah') ?></td><td><input type="text" class="form-control" name="id_sekolah" id="id_sekolah" placeholder="Id Sekolah" value="<?php echo $id_sekolah; ?>" /></td></tr> -->
 	    <tr><td></td><td><input type="hidden" name="id_fasilitas" value="<?php echo $id_fasilitas; ?>" /> 
 	    <button type="submit" class="btn btn-danger"><i class="fa fa-floppy-o"></i> <?php echo $button ?></button> 
 	    <a href="<?php echo site_url('fasilitas') ?>" class="btn btn-info"><i class="fa fa-sign-out"></i> Kembali</a></td></tr>

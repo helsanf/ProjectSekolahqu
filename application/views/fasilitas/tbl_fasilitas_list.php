@@ -16,7 +16,6 @@
                 <tr>
                     <th width="30px">No</th>
 		    <th>Nama Fasilitas</th>
-		    <th>Image</th>
 		    <th>Id Sekolah</th>
 		    <th width="200px">Action</th>
                 </tr>
@@ -68,7 +67,7 @@
                         {
                             "data": "id_fasilitas",
                             "orderable": false
-                        },{"data": "nama_fasilitas"},{"data": "image"},{"data": "id_sekolah"},
+                        },{"data": "nama_fasilitas"},{"data": "id_sekolah"},
                         {
                             "data" : "action",
                             "orderable": false,

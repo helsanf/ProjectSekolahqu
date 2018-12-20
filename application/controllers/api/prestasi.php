@@ -28,10 +28,14 @@ function __construct($config ='rest'){
             $this->db->where('id_sekolah',$id_sekolah);
             $query=$this->db->count_all_results('tbl_prestasi');
         
+            $sql = "select * from tbl_prestasi where id_sekolah = ? order by id_prestasi desc limit 1";      
+            $querylimit = $this->db->query($sql,array($id_sekolah))->result();
             //where result
             $this->db->where('id_sekolah',$id_sekolah);
+            $this->db->order_by('id_prestasi', 'DESC');
             $berita = array(
-              'jumlah_data' => $query,                
+              'jumlah_data' => $query,   
+              'first_data' =>$querylimit,
               'spesifik_sekolah' => $this->db->get('tbl_prestasi')->result(),
             );
         }

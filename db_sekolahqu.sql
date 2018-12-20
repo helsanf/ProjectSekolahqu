@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 12 Des 2018 pada 10.08
+-- Generation Time: 15 Des 2018 pada 15.25
 -- Versi Server: 10.1.30-MariaDB
 -- PHP Version: 7.0.27
 
@@ -21,6 +21,33 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_sekolahqu`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `gambar_fasilitas`
+--
+
+CREATE TABLE `gambar_fasilitas` (
+  `id_gambar_fasilitas` int(11) NOT NULL,
+  `image` varchar(100) NOT NULL,
+  `id_fasilitas` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `gambar_fasilitas`
+--
+
+INSERT INTO `gambar_fasilitas` (`id_gambar_fasilitas`, `image`, `id_fasilitas`) VALUES
+(65, 'bf8249c12e8970274a74b08dc5a36c02.jpg', 16),
+(66, '5219969d0b726c53ddea4db9dde07501.png', 16),
+(67, '3aa5522007678f7753c79c9aaceecf6a.jpg', 16),
+(68, 'bc7fa78ced23099062352eabe2e639a0.png', 17),
+(69, '883810cc987719fc6f8d9bd2235c2f05.jpg', 17),
+(70, 'e84841915a3074ee3089bb7c3c987bfe.jpg', 17),
+(71, 'fe6800ca695e2e48b152584bd7e4e2cb.jpg', 18),
+(72, '03dcd4daeda4790927668b9af93b30e9.jpg', 18),
+(73, '5aba53aa6dd821c623dc39d4e64a82fc.jpg', 18);
 
 -- --------------------------------------------------------
 
@@ -75,6 +102,35 @@ INSERT INTO `tbl_berita` (`id_berita`, `nama_berita`, `tanggal_berita`, `deskrip
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `tbl_bulan`
+--
+
+CREATE TABLE `tbl_bulan` (
+  `id_bulan` int(11) NOT NULL,
+  `nama_bulan` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `tbl_bulan`
+--
+
+INSERT INTO `tbl_bulan` (`id_bulan`, `nama_bulan`) VALUES
+(1, 'January'),
+(2, 'Febuary'),
+(3, 'Maret'),
+(4, 'April'),
+(5, 'Mei'),
+(6, 'Juni'),
+(7, 'Juli'),
+(8, 'Agustus'),
+(9, 'September'),
+(10, 'Oktober'),
+(11, 'November'),
+(12, 'Desember');
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `tbl_ekskul`
 --
 
@@ -105,7 +161,6 @@ INSERT INTO `tbl_ekskul` (`id_ekskul`, `nama_ekskul`, `deskripsi`, `pembina`, `i
 CREATE TABLE `tbl_fasilitas` (
   `id_fasilitas` int(11) NOT NULL,
   `nama_fasilitas` varchar(255) NOT NULL,
-  `image` varchar(255) NOT NULL,
   `id_sekolah` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -113,8 +168,10 @@ CREATE TABLE `tbl_fasilitas` (
 -- Dumping data untuk tabel `tbl_fasilitas`
 --
 
-INSERT INTO `tbl_fasilitas` (`id_fasilitas`, `nama_fasilitas`, `image`, `id_sekolah`) VALUES
-(2, 'Kantin', '9fecff0bd8d80e2e0edf1f236a6750e8.jpg', 0);
+INSERT INTO `tbl_fasilitas` (`id_fasilitas`, `nama_fasilitas`, `id_sekolah`) VALUES
+(16, 'Kantin', 0),
+(17, 'RUANG GURU', 21),
+(18, 'RUANG PELER', 21);
 
 -- --------------------------------------------------------
 
@@ -153,7 +210,39 @@ INSERT INTO `tbl_hak_akses` (`id`, `id_user_level`, `id_menu`) VALUES
 (41, 1, 14),
 (42, 3, 14),
 (43, 1, 15),
-(44, 3, 15);
+(44, 3, 15),
+(45, 1, 16),
+(46, 2, 16),
+(47, 2, 15),
+(48, 2, 14),
+(49, 2, 13),
+(50, 2, 12),
+(51, 3, 16);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `tbl_kalender`
+--
+
+CREATE TABLE `tbl_kalender` (
+  `id_kalender` int(11) NOT NULL,
+  `nama_kalender` varchar(255) NOT NULL,
+  `tanggal` date NOT NULL,
+  `id_bulan` int(11) NOT NULL,
+  `id_sekolah` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `tbl_kalender`
+--
+
+INSERT INTO `tbl_kalender` (`id_kalender`, `nama_kalender`, `tanggal`, `id_bulan`, `id_sekolah`) VALUES
+(12, 'Libur NasionalSS', '2018-12-12', 1, 0),
+(13, 'KEGIATAN CMIEWW OKTOBER', '2018-12-04', 10, 21),
+(14, 'LIBUR NASIONAL', '2018-12-12', 7, 21),
+(15, 'Libur NasionalSS', '2018-12-19', 7, 21),
+(16, 'BAPUK JASA', '2018-12-09', 1, 21);
 
 -- --------------------------------------------------------
 
@@ -184,7 +273,8 @@ INSERT INTO `tbl_menu` (`id_menu`, `title`, `url`, `icon`, `is_main_menu`, `is_a
 (12, 'Berita', 'Berita', 'glyphicon glyphicon-user', 0, 'y'),
 (13, 'Ekskul', 'Ekskul', 'glyphicon glyphicon-user', 0, 'y'),
 (14, 'Fasilitas', 'Fasilitas', 'glyphicon glyphicon-user', 0, 'y'),
-(15, 'Prestasi', 'Prestasi', 'glyphicon glyphicon-user', 0, 'y');
+(15, 'Prestasi', 'Prestasi', 'glyphicon glyphicon-user', 0, 'y'),
+(16, 'Kalender Akademik', 'kalenderakademik', 'glyphicon glyphicon-user', 0, 'y');
 
 -- --------------------------------------------------------
 
@@ -305,6 +395,13 @@ INSERT INTO `tbl_user_level` (`id_user_level`, `nama_level`) VALUES
 --
 
 --
+-- Indexes for table `gambar_fasilitas`
+--
+ALTER TABLE `gambar_fasilitas`
+  ADD PRIMARY KEY (`id_gambar_fasilitas`),
+  ADD KEY `id_fasilitas` (`id_fasilitas`);
+
+--
 -- Indexes for table `tbl_acara`
 --
 ALTER TABLE `tbl_acara`
@@ -317,6 +414,12 @@ ALTER TABLE `tbl_acara`
 ALTER TABLE `tbl_berita`
   ADD PRIMARY KEY (`id_berita`),
   ADD KEY `id_sekolah` (`id_sekolah`);
+
+--
+-- Indexes for table `tbl_bulan`
+--
+ALTER TABLE `tbl_bulan`
+  ADD PRIMARY KEY (`id_bulan`);
 
 --
 -- Indexes for table `tbl_ekskul`
@@ -337,6 +440,12 @@ ALTER TABLE `tbl_fasilitas`
 --
 ALTER TABLE `tbl_hak_akses`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_kalender`
+--
+ALTER TABLE `tbl_kalender`
+  ADD PRIMARY KEY (`id_kalender`);
 
 --
 -- Indexes for table `tbl_menu`
@@ -380,6 +489,12 @@ ALTER TABLE `tbl_user_level`
 --
 
 --
+-- AUTO_INCREMENT for table `gambar_fasilitas`
+--
+ALTER TABLE `gambar_fasilitas`
+  MODIFY `id_gambar_fasilitas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+
+--
 -- AUTO_INCREMENT for table `tbl_acara`
 --
 ALTER TABLE `tbl_acara`
@@ -392,6 +507,12 @@ ALTER TABLE `tbl_berita`
   MODIFY `id_berita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `tbl_bulan`
+--
+ALTER TABLE `tbl_bulan`
+  MODIFY `id_bulan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT for table `tbl_ekskul`
 --
 ALTER TABLE `tbl_ekskul`
@@ -401,19 +522,25 @@ ALTER TABLE `tbl_ekskul`
 -- AUTO_INCREMENT for table `tbl_fasilitas`
 --
 ALTER TABLE `tbl_fasilitas`
-  MODIFY `id_fasilitas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_fasilitas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `tbl_hak_akses`
 --
 ALTER TABLE `tbl_hak_akses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+
+--
+-- AUTO_INCREMENT for table `tbl_kalender`
+--
+ALTER TABLE `tbl_kalender`
+  MODIFY `id_kalender` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `tbl_menu`
 --
 ALTER TABLE `tbl_menu`
-  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `tbl_prestasi`

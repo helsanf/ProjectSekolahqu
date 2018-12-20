@@ -31,7 +31,6 @@ class Fasilitas extends CI_Controller
             $data = array(
 		'id_fasilitas' => $row->id_fasilitas,
 		'nama_fasilitas' => $row->nama_fasilitas,
-		'image' => $row->image,
 		'id_sekolah' => $row->id_sekolah,
 	    );
             $this->template->load('template','fasilitas/tbl_fasilitas_read', $data);
@@ -48,7 +47,6 @@ class Fasilitas extends CI_Controller
             'action' => site_url('fasilitas/create_action'),
 	    'id_fasilitas' => set_value('id_fasilitas'),
 	    'nama_fasilitas' => set_value('nama_fasilitas'),
-	    'image' => set_value('image'),
 	    'id_sekolah' => set_value('id_sekolah'),
 	);
         $this->template->load('template','fasilitas/tbl_fasilitas_form', $data);
@@ -57,19 +55,17 @@ class Fasilitas extends CI_Controller
     public function create_action() 
     {
         $this->_rules();
-        $foto = $this->upload_foto();
-        $session = $this->session->userdata('id_sekolah');
-
+        $id_sekolah = $this->session->userdata('id_sekolah');
         if ($this->form_validation->run() == FALSE) {
             $this->create();
         } else {
             $data = array(
 		'nama_fasilitas' => $this->input->post('nama_fasilitas',TRUE),
-		'image' => $foto['file_name'],
-		'id_sekolah' =>$session,
+		'id_sekolah' =>  $id_sekolah,
 	    );
 
-            $this->Fasilitas_Model->insert($data);
+        $insert_id = $this->Fasilitas_Model->insert($data);
+        $this->upload_gambar($insert_id);
             $this->session->set_flashdata('message', 'Create Record Success 2');
             redirect(site_url('fasilitas'));
         }
@@ -85,7 +81,6 @@ class Fasilitas extends CI_Controller
                 'action' => site_url('fasilitas/update_action'),
 		'id_fasilitas' => set_value('id_fasilitas', $row->id_fasilitas),
 		'nama_fasilitas' => set_value('nama_fasilitas', $row->nama_fasilitas),
-		'image' => set_value('image', $row->image),
 		'id_sekolah' => set_value('id_sekolah', $row->id_sekolah),
 	    );
             $this->template->load('template','fasilitas/tbl_fasilitas_form', $data);
@@ -98,37 +93,32 @@ class Fasilitas extends CI_Controller
     public function update_action() 
     {
         $this->_rules();
-        $foto = $this->upload_foto();
-        $session = $this->session->userdata('id_sekolah');
+        $id_fasilitas = $this->input->post('id_fasilitas');
 
         if ($this->form_validation->run() == FALSE) {
             $this->update($this->input->post('id_fasilitas', TRUE));
-        }  if(!empty($_FILES['image']['name'])){
-            foreach ($this->Fasilitas_Model->get_gambar($this->input->post('id_fasilitas')) as $get){
-                if(file_exists('uploads/fasilitas/'.$get->image)){
-                unlink('uploads/fasilitas/'.$get->image);
-                }
-            }
-            $data = array(
-                'nama_fasilitas' => $this->input->post('nama_fasilitas',TRUE),
-                'image' => $foto['file_name'],
-                'id_sekolah' => $session,
-                );
-        
-                    $this->Fasilitas_Model->update($this->input->post('id_fasilitas', TRUE), $data);
-                    $this->session->set_flashdata('message', 'Update Record Success');
-                    redirect(site_url('fasilitas'));
-        }
-        
-        
-        else {
+        } else {
             $data = array(
 		'nama_fasilitas' => $this->input->post('nama_fasilitas',TRUE),
-		
-		'id_sekolah' => $session,
-	    );
+		'id_sekolah' => $this->input->post('id_sekolah',TRUE),
+        );
+        
+        $this->Fasilitas_Model->update($this->input->post('id_fasilitas', TRUE), $data);
+            
+        // $this->Fasilitas_model->update($id_fasilitas);
+        if(!empty($_FILES['userFiles']['name'][0])){
+            foreach ($this->Fasilitas_Model->get_gambar_by_id($id_fasilitas) as $get){
+                if(file_exists('uploads/fasilitas/'.$get->image)){
+                unlink('uploads/fasilitas/'.$get->image);
+                $this->Fasilitas_Model->delete_gambar('id_fasilitas');
+                }
+            }
+            $this->Fasilitas_Model->delete_gambar($id_fasilitas);
+        }
+        $this->upload_gambar($id_fasilitas);
 
-            $this->Fasilitas_Model->update($this->input->post('id_fasilitas', TRUE), $data);
+
+            // $this->Fasilitas_Model->update($this->input->post('id_fasilitas', TRUE), $data);
             $this->session->set_flashdata('message', 'Update Record Success');
             redirect(site_url('fasilitas'));
         }
@@ -139,10 +129,15 @@ class Fasilitas extends CI_Controller
         $row = $this->Fasilitas_Model->get_by_id($id);
 
         if ($row) {
-            unlink('uploads/fasilitas/'.$row->image);
+
+            foreach ($this->Fasilitas_Model->get_gambar_by_id($id) as $get){
+                if(file_exists('uploads/fasilitas/'.$get->image)){
+                unlink('uploads/fasilitas/'.$get->image);
+                $this->Fasilitas_Model->delete_gambar($id);
+                }
+            }
 
             $this->Fasilitas_Model->delete($id);
-
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('fasilitas'));
         } else {
@@ -154,20 +149,50 @@ class Fasilitas extends CI_Controller
     public function _rules() 
     {
 	$this->form_validation->set_rules('nama_fasilitas', 'nama fasilitas', 'trim|required');
+	// $this->form_validation->set_rules('id_sekolah', 'id sekolah', 'trim|required');
+
+	$this->form_validation->set_rules('id_fasilitas', 'id_fasilitas', 'trim');
 	$this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
 
-    function upload_foto(){
-        $config['upload_path']          = 'uploads/fasilitas/';
-        $config['allowed_types']        = 'gif|jpg|png|jpeg';
-        $config['encrypt_name'] = TRUE;
-        //$config['max_size']             = 100;
-        //$config['max_width']            = 1024;
-        //$config['max_height']           = 768;
-        $this->load->library('upload', $config);
-        $this->upload->do_upload('image');
-        return $this->upload->data();
+    function upload_gambar($id){
+        $data = array();
+        if(!empty($_FILES['userFiles']['name'])){
+
+            $filesCount = count($_FILES['userFiles']['name']);
+            $uploadData = [];
+            for($i = 0; $i < $filesCount; $i++){
+                $_FILES['userFile']['name'] = $_FILES['userFiles']['name'][$i];
+                $_FILES['userFile']['type'] = $_FILES['userFiles']['type'][$i];
+                $_FILES['userFile']['tmp_name'] = $_FILES['userFiles']['tmp_name'][$i];
+                $_FILES['userFile']['error'] = $_FILES['userFiles']['error'][$i];
+                $_FILES['userFile']['size'] = $_FILES['userFiles']['size'][$i];
+
+                $uploadPath = 'uploads/fasilitas/';
+                $config['upload_path'] = $uploadPath;
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                $config['encrypt_name'] = TRUE;
+
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if($this->upload->do_upload('userFile')){
+                    $fileData = $this->upload->data();
+                    $uploadData[$i]['image'] = $fileData['file_name'];
+                    $uploadData[$i]['id_fasilitas'] = $id;
+
+                }
+            }
+
+            if(!empty($uploadData)){
+                //Insert file information into the database
+                $insert = $this->Fasilitas_Model->insert_gambar($uploadData);
+                $statusMsg = $insert?'Files uploaded successfully.':'Some problem occurred, please try again.';
+                $this->session->set_flashdata('statusMsg',$statusMsg);
+            }
+        }
+
+        $this->template->load('template','fasilitas/tbl_fasilitas_form',$data);
+
     }
 
 }
-
