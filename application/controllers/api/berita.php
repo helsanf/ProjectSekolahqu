@@ -27,11 +27,15 @@ function __construct($config ='rest'){
             //query count CI
             $this->db->where('id_sekolah',$id_sekolah);
             $query=$this->db->count_all_results('tbl_berita');
-        
+
+            $sql = "select * from tbl_berita where id_sekolah = ? order by id_berita desc limit 1";      
+            $querylimit = $this->db->query($sql,array($id_sekolah))->result();
             //where result
             $this->db->where('id_sekolah',$id_sekolah);
+            $this->db->order_by('id_berita', 'DESC');
             $berita = array(
-              'jumlah_data' => $query,                
+              'jumlah_data' => $query,    
+              'first_data' => $querylimit,            
               'spesifik_sekolah' => $this->db->get('tbl_berita')->result(),
             );
         }
