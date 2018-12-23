@@ -85,7 +85,10 @@ class Acara_Model extends CI_Model
     // insert data
     function insert($data)
     {
+
         $this->db->insert($this->table, $data);
+        $insert_id = $this->db->insert_id();
+        return $insert_id;
     }
 
     // update data

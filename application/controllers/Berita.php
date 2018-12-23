@@ -75,10 +75,61 @@ class Berita extends CI_Controller
 		'id_sekolah' => $session,
 	    );
 
-            $this->Tbl_berita_model->insert($data);
+            $id_berita = (string)$this->Tbl_berita_model->insert($data);
             $this->session->set_flashdata('message', 'Create Record Success 2');
+            $this->firebase($judul,$session,$id_berita ,$session);
+            die();
             redirect(site_url('berita'));
         }
+    }
+    public function firebase($judul,$topics,$id_berita , $id_sekolah){
+        $res = array();
+        $data = array();        
+        $data['body'] = $judul;
+        $data['click_action'] = 'BERITAACTIVITY';
+        $data['id_berita'] = $id_berita;
+        $data['whosend'] = $id_sekolah;
+     
+        
+        $fields = array(
+            'to' => '/topics/' . $topics,
+            // 'notification' => $res,
+            'data' => $data
+        );
+        echo json_encode($fields);
+        // die();
+           
+             // Set POST variables
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $server_key = "AAAAkC01Pmg:APA91bFfKb4x0oUCwshkX5VcbXvHBz-1b0Fk9wTcfr3zaY70DtDFNy47_UeURJjrTNmbtgiOLl5RoAjR_f_L_AOQBxYcJTNvV3xemD01noPCsowKRNJKkNeDFD2v--C-nBQwp9J_4BlR";
+        
+        $headers = array(
+            'Authorization: key=' . $server_key,
+            'Content-Type: application/json'
+        );
+        // Open connection
+        $ch = curl_init();
+ 
+        // Set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $url);
+ 
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+ 
+        // Disabling SSL Certificate support temporarly
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+ 
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+ 
+        // Execute post
+        $result = curl_exec($ch);
+        if ($result === FALSE) {
+            echo 'Curl failed: ' . curl_error($ch);
+        }
+ 
+        // Close connection
+        curl_close($ch);
     }
     
     public function update($id) 
