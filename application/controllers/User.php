@@ -67,6 +67,7 @@ class User extends CI_Controller
     public function create_action() 
     {
         $this->_rules();
+        $this->email();
         $foto = $this->upload_foto();
         if ($this->form_validation->run() == FALSE) {
             $this->create();
@@ -84,13 +85,51 @@ class User extends CI_Controller
 		'id_user_level' => $this->input->post('id_user_level',TRUE),
 		'is_aktif'      => $this->input->post('is_aktif',TRUE),
 	    );
-            // print_r($data);
-            // die();
+            
             $this->User_model->insert($data);
-        
+            $row =  $this->User_model->get_nama_sekolah($data['id_sekolah']);
+            
+             //send email
+             $this->email->from('sekolahqu@dscunikom.com');
+             $this->email->to($data['email']);
+             $this->email->subject('AKUN AKTIFASI');
+           
+             // $body = $this->load->view('USER/confirm',$data,TRUE);
+             $message = 'Dear '. $row->nama_sekolah .',<br><br> Akun anda telah aktif , silahkan Login menggunakan Email : '. $data['email'] .' <br> Password : '. $password.'
+             <br>
+             <br><a href=\'http://sekolahqu.dscunikom.com/index.php/auth\'>KLIK UNTUK LOGIN</a>
+             <br><br>';
+             $this->email->message($message);
+             $this->email->send();
+            
             $this->session->set_flashdata('message', 'Create Record Success');
             redirect(site_url('user'));
         }
+    }
+
+    public function email(){
+
+        $config['protocol'] = 'smtp';
+        $config['smtp_host'] = 'ssl://mail.dscunikom.com';
+        $config['smtp_port'] = '465';
+        $config['smtp_user'] = 'sekolahqu@dscunikom.com';
+        $config['smtp_pass'] = 'helsan1997';  //sender's password
+        $config['mailtype'] = 'html';
+        $config['charset'] = 'iso-8859-1';
+        $config['wordwrap'] = 'TRUE';
+        $config['newline'] = "\r\n";
+
+        $this->load->library('email', $config);
+        $this->email->initialize($config);
+
+
+//send email
+//        $this->email->from('tubesatolif6@gmail.com');
+//        $this->email->to($email);
+//        $this->email->subject('halo helsan');
+//        $this->email->message('halo');
+//
+//        $this->email->send();
     }
     
     public function update($id) 

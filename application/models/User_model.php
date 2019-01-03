@@ -40,6 +40,11 @@ class User_model extends CI_Model
         $this->db->where($this->id, $id);
         return $this->db->get($this->table)->row();
     }
+    function get_nama_sekolah($id){
+        $sql = "select nama_sekolah from tbl_profile_sekolah where id_sekolah = ?";
+        $query = $this->db->query($sql,array($id))->row();
+        return $query;
+    }
     
     // get total rows
     function total_rows($q = NULL) {
