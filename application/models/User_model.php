@@ -9,6 +9,8 @@ class User_model extends CI_Model
     public $table = 'tbl_user';
     public $id = 'id_users';
     public $order = 'DESC';
+    public $email = 'email';
+    public $tokenDB = 'forgot_token';
 
     function __construct()
     {
@@ -39,6 +41,30 @@ class User_model extends CI_Model
     {
         $this->db->where($this->id, $id);
         return $this->db->get($this->table)->row();
+    }
+     // get data by id
+     function get_by_token($tokenDB)
+     {
+         $this->db->where($this->tokenDB, $tokenDB);
+         return $this->db->get($this->table)->row();
+     }
+
+    function cek_email($table,$email){
+        return $this->db->get_where($table,$email);
+      }
+      function update_token($token,$email_user){
+        $sql = 'update tbl_user set forgot_token = ? WHERE email = ?';
+                return $this->db->query($sql,array($token,$email_user));
+      }
+      function update_token_null($token,$id){
+        $sql = 'update tbl_user set forgot_token = ? WHERE id_users = ?';
+     return $this->db->query($sql,array($token,$id));
+     
+      }
+      function update_forgot($pw,$id,$forgot){
+        $sql = 'update tbl_user set password = ? WHERE id_users = ? and forgot_token = ?';
+        return $this->db->query($sql,array($pw,$id,$forgot));
+
     }
     
     // get total rows

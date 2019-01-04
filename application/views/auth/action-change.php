@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>HALAMAN ADMIN SEKOLAHQU</title>
+        <title>LUPA PASSWORD</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.7 -->
@@ -30,38 +30,25 @@
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="<?php echo base_url(); ?>"><b>HALAMAN ADMIN SEKOLAHQU</b></a>
+                <a href="<?php echo base_url(); ?>"><b>HALAMAN LUPA PASSWORD SEKOLAHQU</b></a>
             </div>
             <!-- /.login-logo -->
             <div class="login-box-body">
-                <?php
-                $status_login = $this->session->userdata('status_login');
-                if (empty($status_login)) {
-                    $message = "Silahkan login untuk masuk ke aplikasi";
-                } else {
-                    $message = $status_login;
-                }
-                ?>
-                <p class="login-box-msg"><?php echo $message; ?></p>
-
-                <!--<form action="<?php echo base_url(); ?>/adminlte/index2.html" method="post">-->
-                <?php echo form_open('auth/cheklogin'); ?>
+                <?php echo form_open('password/action_forgot'); ?>
+                <input type="hidden"  name="id_users" value="<?php echo $id_users ?>">
+                <input type="hidden"  name="forgot_token" value="<?php echo $forgot_token ?>">                                                
                 <div class="form-group has-feedback">
-                    <input type="email" class="form-control" name="email" placeholder="Email">
-                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                </div>
-
-                <div class="form-group has-feedback">
-                    <input type="password" class="form-control" name="password" placeholder="Password">
+                    <input type="password" class="form-control" name="password" placeholder="Password Baru Anda">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
+              
                 <div class="row">
-                    <div class="col-xs-4">
-                        <button type="submit" class="btn btn-danger btn-block btn-flat"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</button>
+                    <div class="col-sm-12 ">
+                        <div class="text-center">
+                        <button type="submit" class="btn btn-danger btn-block btn-flat"><i class="fa fa-sign-in" aria-hidden="true"></i> SUBMIT</button>
+                        </div>
                     </div>
-                    <div class="col-xs-6">
-                        <?php echo anchor('password', '<i class="fa fa-eye-slash" aria-hidden="true"></i> Lupa Password', array('class' => 'btn btn-primary btn-block btn-flat')); ?>
-                    </div>
+                    
                 </div>
                 <!-- /.col -->
 
