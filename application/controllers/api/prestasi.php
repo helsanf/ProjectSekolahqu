@@ -47,6 +47,22 @@ function __construct($config ='rest'){
         }
         $this->response($berita,REST_Controller::HTTP_OK);
     }
+
+    function limit_get(){
+        $id_prestasi = $this->get('id_prestasi');
+        
+
+        if($id_prestasi == ''){
+        $query = $this->db->query("select * from tbl_prestasi order by id_prestasi desc limit 5 ");  
+        $prestasi['result'] = $query->result();
+            
+        }else{
+            $this->db->where('id_prestasi',$id_prestasi);
+            $prestasi['result'] = $this->db->get('tbl_prestasi')->result();
+           
+        }
+        $this->response($prestasi , REST_Controller::HTTP_OK);
+    }
 }
      
  
