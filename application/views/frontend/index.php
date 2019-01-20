@@ -266,7 +266,7 @@
 
                     <p class="white-text width-60 mb-30">Aplikasi Sekolahqu adalah aplikasi sistem informasi sekolah berbasis Android.</p>
 
-                    <a href="#" class="btn btn-lg sekolahqu waves-effect waves-light text-medium">Download Now</a>
+                    <a href='https://play.google.com/store/apps/details?id=com.dscunikom.android.sekolahqu&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="100px" width="250px"/></a>
 
                 </div><!-- /.hero-intro -->
             </div><!-- /.container -->
